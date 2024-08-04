@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Rain Effect</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrixCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = '0123456789/*-+/<>?;:[]~!@#$%^&*()+=abcdefghijklmnopqrstuvwxyz';
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array.from({ length: columns }, () => 0);
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = 'white';
+            ctx.font = `${fontSize}px monospace`;
+
+            drops.forEach((drop, x) => {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, x * fontSize, drop * fontSize);
+
+                if (drop * fontSize > canvas.height || Math.random() > 0.975) {
+                    drops[x] = 0;
+                } else {
+                    drops[x]++;
+                }
+            });
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+    </script>
+</body>
+</html>
